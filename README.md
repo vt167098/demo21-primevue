@@ -1,4 +1,7 @@
-# primevue-quickstart-vite
+# demo21-primevue
+
+- 配合demo-21的web api 的前端demo
+- 採 primevue + tailwind css
 
 ## Project setup
 ```
