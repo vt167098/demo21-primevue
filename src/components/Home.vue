@@ -193,8 +193,7 @@ export default {
       getCntm120({
         item: val.item_ct_no.split("-")[0],
         ctNo: val.item_ct_no.split("-")[1],
-        elevNo: 1,
-        size: 1
+        elevNo: 1
       });
     };
 
@@ -207,8 +206,7 @@ export default {
       getCntm120({
         item: store.state.demo21.cntm120.item,
         ctNo: store.state.demo21.cntm120.ct_no,
-        elevNo: elev_no,
-        size: 1
+        elevNo: elev_no
       });
     }
 
@@ -303,10 +301,10 @@ export default {
         resolve(store.dispatch("demo21/getCntm120", val));
       })
         .then((success) => {
-          if (success.length>0&&success[0].item != undefined) {
-            store.commit("demo21/setCntm120", success[0]);
+          if (success.item==val.item&&success.ct_no==val.ctNo&&success.elev_no==val.elevNo) {
+            store.commit("demo21/setCntm120", success);
             display2.value = true;
-          } else if (success.length==0 && val.item==store.state.demo21.cntm120.item && val.ctNo==store.state.demo21.cntm120.ct_no) {
+          } else if (success.elev_no==undefined&&val.elevNo!=1) {
             toast.add({
               severity: "warn",
               summary: "工委單查詢",

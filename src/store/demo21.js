@@ -32,17 +32,30 @@ export const actions = {
         commit.loading = true;
         return axios
             .get(`/demo21/query2`, {
-                params: Object.assign({
-                        size: 1,
-                    },
-                    value
-                ),
+                params: value,
             })
             .then((response) => {
-                return response.data
-                    .map(val => {
-                        return { item: val.item, ct_no: val.ctNo, elev_no: val.elevNo, s104: val.s104, s105: val.s105, s106: val.s106, s107: val.s107, s108: val.s108, s109: val.s109, s110: val.s110, s01: val.s01, elv_amnt: val.elvAmnt, eng_amnt: val.engAmnt, team_1_emp_no: val.team1EmpNo, team_2_emp_no: val.team2EmpNo, team_3_emp_no: val.team3EmpNo, team_1_grade: val.team1Grade, team_2_grade: val.team2Grade, team_3_grade: val.team3Grade }
-                    });
+                return {
+                    item: response.data.item,
+                    ct_no: response.data.ctNo,
+                    elev_no: response.data.elevNo,
+                    s104: response.data.s104,
+                    s105: response.data.s105,
+                    s106: response.data.s106,
+                    s107: response.data.s107,
+                    s108: response.data.s108,
+                    s109: response.data.s109,
+                    s110: response.data.s110,
+                    s01: response.data.s01,
+                    elv_amnt: response.data.elvAmnt,
+                    eng_amnt: response.data.engAmnt,
+                    team_1_emp_no: response.data.team1EmpNo,
+                    team_2_emp_no: response.data.team2EmpNo,
+                    team_3_emp_no: response.data.team3EmpNo,
+                    team_1_grade: response.data.team1Grade,
+                    team_2_grade: response.data.team2Grade,
+                    team_3_grade: response.data.team3Grade
+                };
             })
             .catch((err) => {
                 console.error(err);
