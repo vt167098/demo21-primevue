@@ -1,16 +1,25 @@
 <template>
   <HomeToolBar :display="display" :page="page" @changeValue="changeValue" />
   <div class="card">
-    <DataTable :value="list" showGridlines class="p-datatable-sm" responsiveLayout="scroll">
+    <DataTable
+      :value="list"
+      showGridlines
+      class="p-datatable-sm text-center"
+      responsiveLayout="scroll"
+    >
       <template #header> 合約主檔 </template>
-      <Column field="pro_ctr" header="中心"></Column>
-      <Column field="item_ct_no" header="合約編號"></Column>
+      <Column field="pro_ctr" header="中心" class="text-center"></Column>
+      <Column field="item_ct_no" header="合約編號" class="text-center"></Column>
       <Column field="buld_name" header="大樓名稱"></Column>
-      <Column field="ct_date" header="成交日期"></Column>
-      <Column field="sale_no" header="業務員"></Column>
-      <Column field="nt_amnt" header="合約金額"></Column>
+      <Column field="ct_date" header="成交日期" class="text-center"></Column>
+      <Column field="sale_no" header="業務員" class="text-center"></Column>
+      <Column field="nt_amnt" header="合約金額" class="text-right">
+        <template #body="slotProps">
+          {{ formatCurrency(slotProps.data.nt_amnt) }}
+        </template>
+      </Column>
       <Column field="cust_no" header="客戶名稱"></Column>
-      <Column field="comp_2" header="機更碼"></Column>
+      <Column field="comp_2" header="機更碼" class="text-center"></Column>
       <Column header="功能">
         <template #body="slotProps">
           <Button
@@ -193,7 +202,7 @@ export default {
       getCntm120({
         item: val.item_ct_no.split("-")[0],
         ctNo: val.item_ct_no.split("-")[1],
-        elevNo: 1
+        elevNo: 1,
       });
     };
 
@@ -202,13 +211,16 @@ export default {
     };
 
     const handleRow = (val) => {
-      const elev_no = val=="previous"&&store.state.demo21.cntm120.elev_no==1?0:(val=="next"?1:-1)+store.state.demo21.cntm120.elev_no;
+      const elev_no =
+        val == "previous" && store.state.demo21.cntm120.elev_no == 1
+          ? 0
+          : (val == "next" ? 1 : -1) + store.state.demo21.cntm120.elev_no;
       getCntm120({
         item: store.state.demo21.cntm120.item,
         ctNo: store.state.demo21.cntm120.ct_no,
-        elevNo: elev_no
+        elevNo: elev_no,
       });
-    }
+    };
 
     const selectedOption = (event, value) => {
       if (event.value == "bt") {
@@ -301,17 +313,21 @@ export default {
         resolve(store.dispatch("demo21/getCntm120", val));
       })
         .then((success) => {
-          if (success.item==val.item&&success.ct_no==val.ctNo&&success.elev_no==val.elevNo) {
+          if (
+            success.item == val.item &&
+            success.ct_no == val.ctNo &&
+            success.elev_no == val.elevNo
+          ) {
             store.commit("demo21/setCntm120", success);
             display2.value = true;
-          } else if (success.elev_no==undefined&&val.elevNo!=1) {
+          } else if (success.elev_no == undefined && val.elevNo != 1) {
             toast.add({
               severity: "warn",
               summary: "工委單查詢",
               detail: "無下一筆資料",
               life: 3000,
             });
-            display2.value = true;  
+            display2.value = true;
           } else {
             toast.add({
               severity: "warn",
@@ -332,6 +348,14 @@ export default {
           display2.value = false;
         });
     };
+
+    const formatCurrency = (value) => {
+      return value.toLocaleString("en-US", {
+        style: "currency",
+        currency: "TWD",
+      });
+    };
+
     return {
       optOptions: ref([
         { value: "eq", label: "等於" },
@@ -365,7 +389,8 @@ export default {
       list,
       getData,
       changeValue,
-      handleRow
+      handleRow,
+      formatCurrency,
     };
   },
   components: {
